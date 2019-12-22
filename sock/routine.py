@@ -575,10 +575,9 @@ class TcpClient(Client):
 #####################################################################
 
 try:
-    from utils.socket import ZmqFrame, ZmqPoller
+    from ..socket import ZmqFrame, ZmqPoller
 except ImportError:
     print("无法载入zmq模块，故未能导入class ZmqServer/ZmqClient.")
-    pass
 else:
     class ZmqServer(Routine):
         """ ZmqServer仅仅作为示例模板，且不包含心跳包的管理（由ZMQ自管理） """

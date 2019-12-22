@@ -14,8 +14,8 @@ import os.path
 import sys
 from .debug import get_caller_path
 
-# from .log import make_logger
-# logger = make_logger()
+# from .log import getLogger
+# logger = getLogger()
 
 isPy3 = sys.version_info.major >= 3
 # isPy36 = sys.version_info[0:2] >= (3, 6)
