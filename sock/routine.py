@@ -16,11 +16,11 @@ import socket
 from time import sleep
 from threading import Thread, Event
 
-from util.base import Deletable
-from util.socket import TcpFrame, UdpFrame
-from util.socket import Poller
+from ..base import Deletable
+from ..socket import TcpFrame, UdpFrame
+from ..socket import Poller
 
-from util.log import getLogger
+from ..log import getLogger
 logger = getLogger()
 
 
@@ -575,7 +575,7 @@ class TcpClient(Client):
 #####################################################################
 
 try:
-    from util.socket import ZmqFrame, ZmqPoller
+    from utils.socket import ZmqFrame, ZmqPoller
 except ImportError:
     print("无法载入zmq模块，故未能导入class ZmqServer/ZmqClient.")
     pass

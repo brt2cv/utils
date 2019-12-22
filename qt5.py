@@ -211,7 +211,7 @@ class DialogWrapper(QDialog):
         self.setLayout(QVBoxLayout(self))
 
     def load_plugin(self, str_module, __file__=None, **kwargs):
-        from util.debug import import_plugin
+        from .debug import import_plugin
 
         wx_plugin = import_plugin(str_module, parent=self.parent, attach=self, **kwargs)
         # wx_plugin.setObjectName(self.PLUGIN_ID)

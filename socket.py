@@ -17,7 +17,7 @@ import struct
 import math
 from random import randint
 
-from util.log import getLogger
+from .log import getLogger
 logger = getLogger()
 isDebugging = False
 
