@@ -48,7 +48,7 @@ def venv_expand(path_venv):
     dir_lib = os.path.join(path_venv, LIB_RPATH_PKG)
     # if not os.path.exists(dir_lib):
     #     raise Exception(f"无效的路径【{dir_lib}】")
-    path_expand(dir_lib)
+    site_expand(dir_lib)
 
 # def _expy(folder_name):
 #     """ 注意，目前的配置目录仅自用（个人配置的所有venv目录均位于 '$HOME/enpy' ）"""
