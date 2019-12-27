@@ -13,7 +13,7 @@
 ###############################################################################
 
 import sys
-import os.path
+import os
 
 def path_expand(dir_lib, __file__=None):
     """ 当__file__为None时，dir_lib为绝对路径（或相对工作目录）
@@ -48,7 +48,14 @@ def venv_expand(path_venv):
     dir_lib = os.path.join(path_venv, LIB_RPATH_PKG)
     # if not os.path.exists(dir_lib):
     #     raise Exception(f"无效的路径【{dir_lib}】")
-    path_expand(dir_lib)
+    site_expand(dir_lib)
+
+def chdir_topdir(dir_dst):
+    # 修改工作目录
+    os.chdir(dir_dst)
+    cwd = os.getcwd()
+    # 修改顶层目录
+    sys.path[0] = cwd
 
 # def _expy(folder_name):
 #     """ 注意，目前的配置目录仅自用（个人配置的所有venv目录均位于 '$HOME/enpy' ）"""

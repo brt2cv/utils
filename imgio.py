@@ -14,6 +14,7 @@
 import numpy as np
 from PIL import Image as PilImageModule
 from imageio import imread, imwrite
+imsave = imwrite
 
 def shape2size(shape):
     """ im_arr.shape: {h, w, c}
