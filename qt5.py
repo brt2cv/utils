@@ -62,7 +62,7 @@ def extract_widgets(layout1wx, **kwargs):
 
     args_type = kwargs.get("type")
     args_types = kwargs.get("types")
-    args_all = kwargs.get("all")
+    args_all = "all" in kwargs
 
     for index in range(layout.count()):
         layout_item = layout.itemAt(index)
@@ -77,6 +77,25 @@ def extract_widgets(layout1wx, **kwargs):
             collection.append(sub_widget)
 
     return collection
+
+
+def clear_layout(layout):
+    """
+        itemAt(): 描述如何递归布局
+        takeAt(): 描述如何移除布局中的元素
+    """
+    list_wx = extract_widgets(layout, all="anything here")
+    for wx in list_wx:
+        wx.deleteLater()
+
+    # for index in range(layout.count()):
+    while True:
+        wx_item = layout.takeAt(0)
+        if wx_item is None:
+            break
+        else:
+            layout.removeItem(wx_item)
+            del wx_item
 
 #####################################################################
 
