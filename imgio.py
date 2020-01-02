@@ -190,7 +190,7 @@ def bytes2ndarray(data, mode, **kwargs):
     else:
         raise Exception("必须传入size或shape参数")
 
-    converter.from_bytes(data, mode, size)
+    converter.from_bytes(data, mode, size=size)
     im_arr = converter.to_numpy()
     return im_arr
 
