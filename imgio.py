@@ -4,8 +4,8 @@
 # Usage:
 # Author:       Bright Li
 # Modified by:
-# Created:      2019-12-07
-# Version:      [0.2.1]
+# Created:      2020-01-03
+# Version:      [0.2.2]
 # RCS-ID:       $$
 # Copyright:    (c) Bright Li
 # Licence:
@@ -221,25 +221,23 @@ def convert_mode(im_arr, mode_to, mode_from=None):
         im_arr2 = converter.to_numpy()
         return im_arr2
 
+"""
+def opencv2rgb(color_space):
+    if color_space == "GRAY":
+        raise Exception("敬请期待")
 
-#####################################################################
-def deprecated():
+    elif color_space == "BGR":
+        img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    elif color_space == "HSV":
+        img_rgb = cv2.cvtColor(img, cv2.COLOR_HSV2RGB)
+    elif color_space == "LAB":
+        img_rgb = cv2.cvtColor(img, cv2.COLOR_LAB2RGB)
+    elif color_space == "YUV":
+        img_rgb = cv2.cvtColor(img, cv2.COLOR_YUV2RGB)
+    elif color_space == "YCrCb":
+        img_rgb = cv2.cvtColor(img, cv2.COLOR_YCrCb2RGB)  # COLOR_BGR2YCR_CB
+    else:
+        raise Exception("未知的图像色彩空间")
 
-    def opencv2rgb(color_space):
-        if color_space == "GRAY":
-            raise Exception("敬请期待")
-
-        elif color_space == "BGR":
-            img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        elif color_space == "HSV":
-            img_rgb = cv2.cvtColor(img, cv2.COLOR_HSV2RGB)
-        elif color_space == "LAB":
-            img_rgb = cv2.cvtColor(img, cv2.COLOR_LAB2RGB)
-        elif color_space == "YUV":
-            img_rgb = cv2.cvtColor(img, cv2.COLOR_YUV2RGB)
-        elif color_space == "YCrCb":
-            img_rgb = cv2.cvtColor(img, cv2.COLOR_YCrCb2RGB)  # COLOR_BGR2YCR_CB
-        else:
-            raise Exception("未知的图像色彩空间")
-
-        return img_rgb
+    return img_rgb
+"""
