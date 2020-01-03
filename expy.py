@@ -57,8 +57,12 @@ def chdir_topdir(dir_dst):
     # sys.path[0] = os.getcwd()
     sys.path.insert(0, dir_dst_abs)
 
-# def _expy(folder_name):
-#     """ 注意，目前的配置目录仅自用（个人配置的所有venv目录均位于 '$HOME/enpy' ）"""
-#     ENPY_PREFIX = os.path.join(os.getenv("HOME"), "enpy")
-#     path_venv = os.path.join(ENPY_PREFIX, folder_name)
-#     venv_expand(path_venv)
+def _expy(folder_name):
+    """ 注意，目前的配置目录仅自用（个人配置的所有venv目录均位于 '$HOME/enpy' ）"""
+    ENPY_PREFIX = os.path.join(os.getenv("HOME"), "enpy")
+    path_venv = os.path.join(ENPY_PREFIX, folder_name)
+    venv_expand(path_venv)
+
+def expy_pydev():
+    path_pydev = os.path.join(os.getenv("HOME"), "local/utils/pydev")
+    site_expand(path_pydev)
