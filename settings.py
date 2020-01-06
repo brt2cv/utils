@@ -1,27 +1,20 @@
 ###############################################################################
 # Name:         settings
-# Usage:        class PluginSettings(IniConfigSettings):
-#                   PATH_SETTING = "config/settings.ini"
-#                   def __init__(self):
-#                       super().__init__()
-#                       # 载入项目固定路径的配置，实例化时则无需关心是否load
-#                       # path_ini = os.path.abspath(PATH_SETTING)  # 相对工程目录的路径
-#                       path_curr_file = os.path.dirname(__file__)
-#                       path_ini = os.path.join(path_curr_file, PATH_SETTING)  # 相对当前文件的路径
-#                       self.load(path_ini)
-#
+# Usage:        settings = IniConfigSettings()
+#               settings.load(rpath2curr("config/settings.ini")
 # Author:       Bright Li
 # Modified by:
-# Created:      2019/10/09
-# Version:      [0.0.1]
+# Created:      2020-01-06
+# Version:      [0.1.0]
 # RCS-ID:       $$
 # Copyright:    (c) Bright Li
 # Licence:
 ###############################################################################
 
 import json
-from configparser import ConfigParser
+from configparser import ConfigParser, Error
 import os.path
+from .base import rpath2curr
 
 class SettingsBase:
     def __init__(self):
@@ -44,6 +37,7 @@ class SettingsBase:
 
     def save(self, path_save_as=None):
         pass
+
 
 class JsonSettings(SettingsBase):
     def load(self, path_config):
@@ -85,6 +79,12 @@ class IniConfigSettings(ConfigParser):  # SettingsBase
             path_save_as = self.path
         with open(path_save_as, 'w') as fp:
             self.write(fp)
+
+    def get(self, section, option, default=None):
+        try:
+            return super().get(section, option, raw=True)
+        except Error:
+            return default
 
 
 if __name__ == "__test_singleton__":
