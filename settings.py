@@ -4,8 +4,8 @@
 #               settings.load(rpath2curr("config/settings.ini")
 # Author:       Bright Li
 # Modified by:
-# Created:      2020-01-06
-# Version:      [0.1.0]
+# Created:      2020-01-07
+# Version:      [0.1.1]
 # RCS-ID:       $$
 # Copyright:    (c) Bright Li
 # Licence:
@@ -59,14 +59,13 @@ class IniConfigSettings(ConfigParser):  # SettingsBase
         super().__init__()
         self.path = None
 
-    # def get(self, section, option, default=None):
-    #     if not self.has_option(section, option):
-    #         return default
-    #     try:
-    #         print(section, option, default)
-    #         return super().get(section, option)  raw=True!
-    #     except KeyError:
-    #         return default
+    def get(self, section, option, default=None):
+        if not self.has_option(section, option):
+            return default
+        try:
+            return super().get(section, option, raw=True)
+        except KeyError:
+            return default
 
     def load(self, path_config):
         assert os.path.exists(path_config), f"Settings导入失败：不存在配置文件【{path_config}】"
@@ -79,12 +78,6 @@ class IniConfigSettings(ConfigParser):  # SettingsBase
             path_save_as = self.path
         with open(path_save_as, 'w') as fp:
             self.write(fp)
-
-    def get(self, section, option, default=None):
-        try:
-            return super().get(section, option, raw=True)
-        except Error:
-            return default
 
 
 if __name__ == "__test_singleton__":
