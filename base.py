@@ -84,6 +84,15 @@ def module_name(module):
 def module_path(module):
     return module.__file__
 
+def reload_package(dir_package):
+    import glob
+    modules = glob.glob(os.path.join(dir_package, "*.py"))
+    list_modules = [ f for f in modules
+                     if os.path.isfile(f) and not f.endswith('__init__.py')]
+
+    for path_module in list_modules:
+        module = path2module(path_module)
+        importlib.reload(module)
 
 def path2strmod(path):
     if os.path.isabs(path):
