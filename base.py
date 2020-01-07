@@ -3,8 +3,8 @@
 # Usage:
 # Author:       Bright Li
 # Modified by:
-# Created:      2019-12-13
-# Version:      [0.1.1]
+# Created:      2020-01-07
+# Version:      [0.1.2]
 # RCS-ID:       $$
 # Copyright:    (c) Bright Li
 # Licence:
@@ -65,9 +65,27 @@ class Deletable:
         self.isDel = True
 
 #####################################################################
-from importlib import import_module  # reload
+import importlib
+import inspect
 
-def path2module(path):
+def module_func(module):
+    """ return a dict of {name: method_obj} """
+    list_ = inspect.getmembers(module, inspect.isfunction)
+    return dict(list_)
+
+def module_class(module):
+    """ return a dict of {name: class_obj} """
+    list_ = inspect.getmembers(module, inspect.isclass)
+    return dict(list_)
+
+def module_name(module):
+    return module.__name__
+
+def module_path(module):
+    return module.__file__
+
+
+def path2strmod(path):
     if os.path.isabs(path):
         raise Exception("请使用相对路径载入项目模块")
 
@@ -77,6 +95,18 @@ def path2module(path):
     module = path_linux.replace("/", ".")
     return module
 
+def path2module(path, package=None):
+    str_module = path2strmod(path)
+    return importlib.import_module(str_module, package)
+
+"""
+def path2module2(path):
+    name = os.path.basename(path).splitext()[0]
+    module_spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(module_spec)
+    module_spec.loader.exec_module(module)
+    return module
+"""
 
 class IPluginObject:
     def run(self, *args, **kwargs):
@@ -91,8 +121,8 @@ def import_plugin(module, package=None, **kwargs):
     """
     if isinstance(module, str):
         if module.find("/") >= 0 or module.rfind(".py") >= 0:
-            module = path2module(module)
-        module = import_module(module, package)
+            module = path2strmod(module)
+        module = importlib.import_module(module, package)
 
     plugin_obj = module.export_plugin(**kwargs)
     return plugin_obj
