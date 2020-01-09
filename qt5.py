@@ -304,8 +304,7 @@ from .base import path2module
 def loadUi_by_Mixin(uifile, instance):
     """ uifile需要相对路径导入 """
     # path = without_ext.replace("ui/", "ui2py.")  # 默认规则：将res/ui目录改为res/ui2py
-    str_module = path2module(uifile)
-    module = import_module(str_module)
+    module = path2module(uifile)
     try:
         Ui_Form = getattr(module, "Ui_Form")
     except AttributeError:
