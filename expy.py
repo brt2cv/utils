@@ -49,13 +49,16 @@ def venv_expand(path_venv):
     #     raise Exception(f"无效的路径【{dir_lib}】")
     site_expand(dir_lib)
 
-def chdir_topdir(dir_dst):
-    # 修改工作目录
+def topdir(dir_dst, override=False):
     dir_dst_abs = os.path.abspath(dir_dst)
-    os.chdir(dir_dst_abs)
     # 修改顶层目录
-    # sys.path[0] = os.getcwd()
-    sys.path.insert(0, dir_dst_abs)
+    if override:
+        sys.path[0] = dir_dst_abs  # os.getcwd()
+    else:
+        sys.path.insert(0, dir_dst_abs)
+    return dir_dst_abs
+
+chdir = os.chdir
 
 def _expy(folder_name):
     """ 注意，目前的配置目录仅自用（个人配置的所有venv目录均位于 '$HOME/enpy' ）"""
