@@ -65,23 +65,32 @@ class UnitRadio(QGroupBox):  # UnitBase
         self.setTitle(name)
         layout = QGridLayout(self)
         self.btn_group = QButtonGroup(self)
+        self.btn_group.setExclusive(True)  # 独占
 
+        radio_id = -1
         for row, list_row in enumerate(choices):
             for column, str_item in enumerate(list_row):
                 btn_radio = QRadioButton(str_item, self)
                 layout.addWidget(btn_radio, row, column)
-                radio_id = -1 if choices_id is None else choices_id[row][column]
+                if choices_id is None:
+                    radio_id += 1
+                else:
+                    radio_id = choices_id[row][column]
                 self.btn_group.addButton(btn_radio, radio_id)
 
-        # try:
-        btn = self.btn_group.button(val_init)
-        btn.setChecked(True)
+        self.set_value(val_init)
 
     def set_slot(self, func_slot):
         self.btn_group.buttonClicked.connect(func_slot)
 
     def get_value(self):
-        return self.btn_group.checkedId()
+        return self.btn_group.checkedId()  # checkedButton()
+
+    def get_text(self):
+        return self.btn_group.checkedButton().text()
+
+    def set_value(self, index):
+        self.btn_group.button(index).setChecked(True)
 
 
 class UnitSlider(UnitBase):
