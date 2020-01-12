@@ -93,6 +93,58 @@ class UnitRadio(QGroupBox):  # UnitBase
         self.btn_group.button(index).setChecked(True)
 
 
+class UnitCheckBox(QGroupBox):  # UnitBase
+    def __init__(self, parent, name, choices, val_init=0, choices_id=None):
+        """ choices = [
+            ["row0", "row0_1", "row0_2"],
+            ["row1", "row1_1", "row1_2"]]
+        """
+        super().__init__(parent)
+
+        self.setTitle(name)
+        layout = QGridLayout(self)
+        self.btn_group = QButtonGroup(self)
+        self.btn_group.setExclusive(False)
+
+        radio_id = -1
+        for row, list_row in enumerate(choices):
+            for column, str_item in enumerate(list_row):
+                btn_radio = QCheckBox(str_item, self)
+                layout.addWidget(btn_radio, row, column)
+                if choices_id is None:
+                    radio_id += 1
+                else:
+                    radio_id = choices_id[row][column]
+                self.btn_group.addButton(btn_radio, radio_id)
+
+        self.set_value(val_init)
+
+    def set_slot(self, func_slot):
+        self.btn_group.buttonClicked.connect(func_slot)
+
+    def get_value(self):
+        # return self.btn_group.checkedId()  # checkedButton()
+        list_ret = []
+        for btn in self.btn_group.buttons():
+            if btn.isChecked():
+                list_ret.append(self.btn_group.id(btn))
+        return list_ret
+
+    def get_text(self):
+        list_ret = []
+        for btn in self.btn_group.buttons():
+            if btn.isChecked():
+                list_ret.append(btn.text())
+        return list_ret
+
+    def set_value(self, checked_id):
+        """ checked_id: int or a list of id """
+        if isinstance(checked_id, int):
+            checked_id = [checked_id]
+        for btn in self.btn_group.buttons():
+            btn.setChecked(btn in checked_id)
+
+
 class UnitSlider(UnitBase):
     def __init__(self, parent, name, val_range=None, val_default=0, showValue=True, isCheckbox=True, isChecked=False):
         super().__init__(parent)
