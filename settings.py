@@ -4,17 +4,16 @@
 #               settings.load(rpath2curr("config/settings.ini")
 # Author:       Bright Li
 # Modified by:
-# Created:      2020-01-07
-# Version:      [0.1.1]
+# Created:      2020-01-12
+# Version:      [0.1.2]
 # RCS-ID:       $$
 # Copyright:    (c) Bright Li
 # Licence:
 ###############################################################################
 
 import json
-from configparser import ConfigParser, Error
+from configparser import ConfigParser  # Error
 import os.path
-from .base import rpath2curr
 
 class SettingsBase:
     def __init__(self):
@@ -52,6 +51,42 @@ class JsonSettings(SettingsBase):
             path_save_as = self.path
         with open(path_save_as, 'w') as fp:
             json.dump(self.data, fp)
+
+    def _get(self, top_key, options: list, default=None):
+        """ options: 配置的层级属性，本可以与top_key统一存放
+            独立top_key纯粹是为了统一ini的接口。
+        """
+        if options is None:
+            options = []
+        try:
+            tree_node = self.data[top_key]
+            for key in options:
+                """
+                key 可以是:
+                    int: for a list
+                    str: for a dict
+                """
+                tree_node = tree_node[key]
+            return tree_node
+        except KeyError:
+            return default
+
+    def get(self, top_key, variable=None, var2=None):
+        """ 当无需考虑统一ini接口时，可以按照SettingsBase接口操作
+            eg:
+                get(["key", "key2", 3, "key4"], "default")
+                get("key", ["key2", 3, "key4"])
+                get("key", "default")
+        """
+        if var2:
+            return self._get(top_key, variable, var2)
+        elif isinstance(top_key, list):
+            # 将top_key与options合并
+            return self._get(top_key[0], top_key[1:], variable)
+        elif isinstance(variable, list):
+            return self._get(top_key, variable, None)
+        else:
+            return self._get(top_key, None, variable)
 
 
 class IniConfigSettings(ConfigParser):  # SettingsBase
