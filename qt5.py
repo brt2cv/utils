@@ -211,7 +211,7 @@ def make_dialog(parent, func_wx_create, title=None, size=None, path_icon=None):
         dialog.resize(*size)
     QVBoxLayout(dialog)
 
-    unit_widget = func_wx_create(parent=parent, attach=dialog)
+    unit_widget = func_wx_create(parent=dialog)
     attach_widget(dialog, unit_widget, noOuterMargins=True)
     return dialog
 
