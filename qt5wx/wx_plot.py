@@ -20,7 +20,7 @@ def plot(figure):
 
 
 class UnitPlot(QWidget):
-    def __init__(self, parent, func_plot, name=""):
+    def __init__(self, parent, name=""):
         super().__init__(parent)
 
         self.figure = plt.figure()
@@ -44,6 +44,7 @@ class UnitPlot(QWidget):
         if name:
             plt.title(name)
 
+    def show(self, func_plot):
         # 绘制图形
         func_plot(self.figure)
         self.canvas.draw()
