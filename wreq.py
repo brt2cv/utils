@@ -3,8 +3,8 @@
 # Usage:
 # Author:       Bright Li
 # Modified by:
-# Created:      2020-02-03
-# Version:      [0.0.2]
+# Created:      2020-02-11
+# Version:      [0.0.3]
 # RCS-ID:       $$
 # Copyright:    (c) Bright Li
 # Licence:
@@ -27,17 +27,28 @@ def get_headers():
 #     "pyquery"
 # }
 
-def make_request(url, method="r"):
+def make_request(url, method="r", timeout=5, retry=0):
     # assert method in _request_method, f"未知的Method: 【{method}】"
-    if method == "r" or method == "requests":
+    def run_requests(url, timeout, retry):
         import requests
-        r = requests.get(url, _headers)
+        # r = requests.get(url, _headers, timeout=[timeout, 30])
+        s = requests.Session()
+        if retry:  # 用于设置超时重连
+            from requests.adapters import HTTPAdapter
+            s.mount('http://', HTTPAdapter(max_retries=retry))
+            s.mount('https://', HTTPAdapter(max_retries=retry))
+
+        r = s.get(url, headers=_headers, timeout=timeout)
         r.encoding = "utf-8"
         return r
+
+    if method == "r" or method == "requests":
+        return run_requests(url, timeout, retry)
     elif method == "dom" or method == "pyquery":
-        import pyquery
-        dom = pyquery.PyQuery(url, encoding="utf-8")
-        return dom
+        from pyquery import PyQuery
+        # dom = pyquery.PyQuery(url, encoding="utf-8")
+        r = run_requests(url, timeout, retry)
+        return PyQuery(r.text)
     elif method == "browser" or method == "selenium":
         # from selenium import webdriver
         browser = make_webdriver()
@@ -46,6 +57,7 @@ def make_request(url, method="r"):
     # elif method in _dict_webdriver:
     else:
         raise Exception(f"未知的Method: 【{method}】")
+
 
 #####################################################################
 try:
