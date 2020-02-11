@@ -35,14 +35,25 @@ def isDir(f):
 def rpath2curr(f):
     """ 这个命名可能并不恰当，表示相对__file__的文件，转为绝对路径 """
     path_caller = get_caller_path()
+    # print("---- path_caller: ", path_caller)
+    # return os.path.relpath(f, path_caller)
     path_dir = os.path.dirname(path_caller)
-    return os.path.join(path_dir, f)
+    path_abs = os.path.join(path_dir, f)
+    # print("__", path_abs)
+    return path_abs
+
+def rpath2abs(path_rel, start=None):
+    """ if start is None, equals to param: __file__ """
+    path_caller = get_caller_path() if start is None else start
+    # return os.path.relpath(path_rel, path_caller)
+    path_dir = os.path.dirname(path_caller)
+    return os.path.join(path_dir, path_rel)
 
 #####################################################################
 
+_instance = {}  # 略显丑陋
 def singleton(cls):
     # 对于单例类，无法通过继承的方式节省代码
-    _instance = {}  # 略显丑陋
     def inner():
         if cls not in _instance:
             _instance[cls] = cls()

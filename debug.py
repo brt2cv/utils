@@ -26,9 +26,9 @@ def curr_frame():
 def get_caller_path():
     """ 获取caller调用者模块的路径 """
     path_file = sys._getframe(2).f_code.co_filename  # inspect.stack()[2][1]
-    # print(path_file, ">>>")
+    # print("--- sys._getframe: ", path_file)
     # import inspect
-    # print(inspect.stack()[2][1], "<<<")
+    # print("--- inspect.stack: ", inspect.stack()[2][1])
     return path_file
 
 # typedef struct _frame {
