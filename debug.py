@@ -11,6 +11,7 @@
 ###############################################################################
 
 import sys
+import traceback
 
 def get_frame():
     func_name = sys._getframe(1).f_code.co_name
@@ -42,6 +43,10 @@ def get_caller_path():
 #     PyObject **f_stacktop;    /* 运行时栈顶 */
 #     ……
 # }
+
+def dump_exception(e):
+    print("%s EXCEPTION:" % e.__class__.__name__, e)
+    traceback.print_tb(e.__traceback__)
 
 # decorator
 def find_caller(func):
