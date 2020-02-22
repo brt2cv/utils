@@ -3,12 +3,14 @@
 # Usage:
 # Author:       Bright Li
 # Modified by:
-# Created:      2020-02-11
-# Version:      [0.0.3]
+# Created:      2020-02-21
+# Version:      [0.0.5]
 # RCS-ID:       $$
 # Copyright:    (c) Bright Li
 # Licence:
 ###############################################################################
+
+import requests
 
 _headers = {
     "Accept-Language": "zh-CN,zh;q=0.9",
@@ -17,6 +19,8 @@ _headers = {
     # "Pragma": "no-cache",
     "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36",
 }
+
+RequestException = requests.exceptions.RequestException
 
 def get_headers():
     return _headers
@@ -30,7 +34,6 @@ def get_headers():
 def make_request(url, method="r", timeout=5, retry=0):
     # assert method in _request_method, f"未知的Method: 【{method}】"
     def run_requests(url, timeout, retry):
-        import requests
         # r = requests.get(url, _headers, timeout=[timeout, 30])
         s = requests.Session()
         if retry:  # 用于设置超时重连
@@ -52,6 +55,7 @@ def make_request(url, method="r", timeout=5, retry=0):
     elif method == "browser" or method == "selenium":
         # from selenium import webdriver
         browser = make_webdriver()
+        browser.implicitly_wait(timeout)
         browser.get(url)
         return browser
     # elif method in _dict_webdriver:
@@ -74,7 +78,7 @@ else:
             "path_webdriver": "webdriver/chrome76/chromedriver.exe"
         },
         "360chrome": {
-            "path_bin": r"D:\programs\360chrome\360chrome.exe",
+            "path_bin": "D:/programs/360chrome/360chrome.exe",
             "path_webdriver": "webdriver/chrome69/chromedriver.exe"
         }
     }
@@ -86,7 +90,8 @@ else:
         # options = webdriver.chrome.options.Options()
 
         # 选项说明: https://sites.google.com/a/chromium.org/chromedriver/capabilities
-        options.setBinary = path_chrome_bin
+        options.binary_location = path_chrome_bin
+        # options.setBinary = path_chrome_bin  # 无法找到路径
         if headless:
             options.add_argument("--headless")
             options.add_argument('--disable-gpu')
@@ -100,14 +105,22 @@ else:
         if name == "phantomjs":
             driver = webdriver.PhantomJS(path_bin)
         else:
+            print("path_chrome_binary -->", path_bin)
             options = _make_options(path_bin, headless)
 
             path_webdriver = _dict_webdriver[name]["path_webdriver"]
-            # print(">>>", path_bin, path_webdriver)
-            driver = webdriver.Chrome(path_webdriver,
-                                    options=options)
+            print("path_webdriver -->", path_webdriver)
 
-        # driver.implicitly_wait(5)
+            from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+            caps = DesiredCapabilities.CHROME
+            # 必须有这一句，才能在后面获取到performance
+            caps['loggingPrefs'] = {'performance': 'ALL'}
+            # chrome_options.add_experimental_option('w3c', False)  # 测试：非必须
+
+            driver = webdriver.Chrome(path_webdriver,
+                                    options=options,
+                                    desired_capabilities=caps)
+
         return driver
 
     make_selenium = make_webdriver
