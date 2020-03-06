@@ -5,8 +5,8 @@
 #               path_append("./venv/Lib/site-packages", __file__)
 # Author:       Bright Li
 # Modified by:
-# Created:      2020-01-01
-# Version:      [2.0.1]
+# Created:      2020-03-06
+# Version:      [2.1.1]
 # RCS-ID:       $$
 # Copyright:    (c) Bright Li
 # Licence:
@@ -42,8 +42,14 @@ def site_expand(dir_lib, __file__=None):
     """
     path_expand(dir_lib, __file__, True)
 
+#####################################################################
+from platform import system, python_version_tuple
+platform_is_Windows = system() == "Windows"
+python_version = ".".join(python_version_tuple()[:2])
+
 def venv_expand(path_venv):
-    LIB_RPATH_PKG = "lib/site-packages"
+    LIB_RPATH_PKG = "lib/site-packages" if platform_is_Windows else \
+                    "lib/python{}/site-packages".format(python_version)
     dir_lib = os.path.join(path_venv, LIB_RPATH_PKG)
     # if not os.path.exists(dir_lib):
     #     raise Exception(f"无效的路径【{dir_lib}】")
