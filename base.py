@@ -51,7 +51,7 @@ def rpath2abs(path_rel, start=None):
 
 #####################################################################
 
-_instance = {}  # 略显丑陋
+_instance = {}  # 略显丑陋，进程不安全（Python多进程不共享全局变量）
 def singleton(cls):
     # 对于单例类，无法通过继承的方式节省代码
     def inner():
