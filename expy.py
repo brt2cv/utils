@@ -6,7 +6,7 @@
 # Author:       Bright Li
 # Modified by:
 # Created:      2020-03-06
-# Version:      [2.1.1]
+# Version:      [2.1.2]
 # RCS-ID:       $$
 # Copyright:    (c) Bright Li
 # Licence:
@@ -43,14 +43,12 @@ def site_expand(dir_lib, __file__=None):
     path_expand(dir_lib, __file__, True)
 
 #####################################################################
-from platform import system, python_version_tuple
-platform_is_Windows = system() == "Windows"
-python_version = ".".join(python_version_tuple()[:2])
+from .base import isWindows
+VENV_PATH_SITE_PACKAGES = "lib/site-packages" if isWindows else \
+    "lib/python{}.{}/site-packages".format(*sys.version_info[:2])
 
 def venv_expand(path_venv):
-    LIB_RPATH_PKG = "lib/site-packages" if platform_is_Windows else \
-                    "lib/python{}/site-packages".format(python_version)
-    dir_lib = os.path.join(path_venv, LIB_RPATH_PKG)
+    dir_lib = os.path.join(path_venv, VENV_PATH_SITE_PACKAGES)
     # if not os.path.exists(dir_lib):
     #     raise Exception(f"无效的路径【{dir_lib}】")
     site_expand(dir_lib)
@@ -63,8 +61,6 @@ def topdir(dir_dst, override=False):
     else:
         sys.path.insert(0, dir_dst_abs)
     return dir_dst_abs
-
-chdir = os.chdir
 
 def _expy(folder_name):
     """ 注意，目前的配置目录仅自用（个人配置的所有venv目录均位于 '$HOME/enpy' ）"""
