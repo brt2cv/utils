@@ -3,8 +3,8 @@
 # Usage:
 # Author:       Bright Li
 # Modified by:
-# Created:      2020-02-21
-# Version:      [0.0.5]
+# Created:      2020-03-08
+# Version:      [0.0.6]
 # RCS-ID:       $$
 # Copyright:    (c) Bright Li
 # Licence:
@@ -47,11 +47,6 @@ def make_request(url, method="r", timeout=5, retry=0):
 
     if method == "r" or method == "requests":
         return run_requests(url, timeout, retry)
-    elif method == "dom" or method == "pyquery":
-        from pyquery import PyQuery
-        # dom = pyquery.PyQuery(url, encoding="utf-8")
-        r = run_requests(url, timeout, retry)
-        return PyQuery(r.text)
     elif method == "browser" or method == "selenium":
         # from selenium import webdriver
         browser = make_webdriver()
@@ -62,6 +57,16 @@ def make_request(url, method="r", timeout=5, retry=0):
     else:
         raise Exception(f"未知的Method: 【{method}】")
 
+def HtmlParser(requests_obj, output="bs4"):
+    if output == "bs4" or output == "BeautifulSoup":
+        from bs4 import BeautifulSoup
+        return BeautifulSoup(requests_obj.text, "html.parser")
+    elif output == "dom" or output == "pyquery":
+        from pyquery import PyQuery
+        # dom = pyquery.PyQuery(url, encoding="utf-8")
+        return PyQuery(requests_obj.text)
+    else:
+        raise Exception(f"未知的Html解析器类型【{output}】")
 
 #####################################################################
 try:
