@@ -1,7 +1,7 @@
 
 ###############################################################################
 # Name:         expy
-# Usage:        expand_venv("$HOME/enpy/qt5")
+# Usage:        expand_venv("$HOME/.enpy/qt5")
 #               path_append("./venv/Lib/site-packages", __file__)
 # Author:       Bright Li
 # Modified by:
@@ -63,8 +63,11 @@ def topdir(dir_dst, override=False):
     return dir_dst_abs
 
 def _expy(folder_name):
-    """ 注意，目前的配置目录仅自用（个人配置的所有venv目录均位于 '$HOME/enpy' ）"""
-    ENPY_PREFIX = os.path.join(os.getenv("HOME"), "enpy")
+    """ 注意，目前的配置目录仅自用（个人配置的所有venv目录均位于 '$HOME/.enpy' ）"""
+    if folder_name[0] == ".":  # 相对路径
+        ENPY_PREFIX = os.path.abspath(os.path.curdir)
+    else:
+        ENPY_PREFIX = os.path.join(os.getenv("HOME"), ".enpy")
     path_venv = os.path.join(ENPY_PREFIX, folder_name)
     venv_expand(path_venv)
 
