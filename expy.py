@@ -62,10 +62,12 @@ def topdir(dir_dst, override=False):
         sys.path.insert(0, dir_dst_abs)
     return dir_dst_abs
 
-def _expy(folder_name):
+def enpy(folder_name):
     """ 注意，目前的配置目录仅自用（个人配置的所有venv目录均位于 '$HOME/.enpy' ）"""
     if folder_name[0] == ".":  # 相对路径
         ENPY_PREFIX = os.path.abspath(os.path.curdir)
+    elif folder_name[0] in ["/", "~"]:  # 绝对路径
+        ENPY_PREFIX = ""
     else:
         ENPY_PREFIX = os.path.join(os.getenv("HOME"), ".enpy")
     path_venv = os.path.join(ENPY_PREFIX, folder_name)

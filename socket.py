@@ -4,8 +4,8 @@
 # Usage:
 # Author:       Bright Li
 # Modified by:
-# Created:      2019/11/04
-# Version:      [0.4.3]
+# Created:      2020/07/02
+# Version:      [0.5.1]
 # RCS-ID:       $$
 # Copyright:    (c) Bright Li
 # Licence:
@@ -17,8 +17,8 @@ import struct
 import math
 from random import randint
 
-from .log import getLogger
-logger = getLogger()
+# from utils.log import getLogger
+# logger = getLogger()
 isDebugging = False
 
 try:

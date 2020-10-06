@@ -4,15 +4,15 @@
 # Usage:
 # Author:       Bright Li
 # Modified by:
-# Created:      2020-01-03
-# Version:      [0.2.2]
+# Created:      2020-09-24
+# Version:      [0.2.3]
 # RCS-ID:       $$
 # Copyright:    (c) Bright Li
 # Licence:
 ###############################################################################
 
+from PIL import Image
 import numpy as np
-from PIL import Image as PilImageModule
 from imageio import imread, imwrite
 imsave = imwrite
 
@@ -33,13 +33,20 @@ def shape2mode(shape):
     else:
         raise Exception("未知的图像类型")
 
-def guess_mode(im_arr):
-    """ 一种预测图像mode的简单方式 """
+def ndarray2mode(im_arr):
+    """ 一种预测图像mode的简单方式，用于ndarray转PIL时自动判断mode。
+        mode: "1", "L", "P", "RGB", "BGR", "RGBA", "YUV", "LAB"
+    """
     if im_arr.ndim < 3:
         return "L"
     else:
-        return shape2mode(im_arr.shape)
-
+        shape = im_arr.shape
+        if shape[2] == 3:
+            return "RGB"  # 无法区分BGR (OpenCV)
+        elif shape[2] == 4:
+            return "RGBA"
+        else:
+            raise Exception("未知的图像类型")
 
 class ImageConverter:
     """ 内部使用numpy::array存储数据
@@ -62,7 +69,7 @@ class ImageConverter:
 
     # IO
     def open(self, path_file):
-        self._img = PilImageModule.open(path_file, "r")
+        self._img = Image.open(path_file, "r")
 
     def save(self, path_file):
         # with open(path_file, "wb") as fp:
@@ -90,7 +97,7 @@ class ImageConverter:
         else:
             raise Exception("必须传入size或shape参数")
 
-        self._img = PilImageModule.frombytes(mode, size, data)
+        self._img = Image.frombytes(mode, size, data)
 
     def to_bytes(self):
         return self._img.tobytes()
@@ -104,7 +111,7 @@ class ImageConverter:
         if mode == "BGR":
             self.from_opencv(im_arr)
             return
-        self._img = PilImageModule.fromarray(im_arr, mode)
+        self._img = Image.fromarray(im_arr, mode)
 
     def to_numpy(self):
         im = np.asarray(self._img)
@@ -112,9 +119,9 @@ class ImageConverter:
 
     def from_qtimg(self, qt_img, type="QPixmap"):
         if type == "QPixmap":
-            self._img = PilImageModule.fromqpixmap(qt_img)
+            self._img = Image.fromqpixmap(qt_img)
         elif type == "QImage":
-            self._img = PilImageModule.fromqimage(qt_img)
+            self._img = Image.fromqimage(qt_img)
         else:
             raise Exception(f"Unkown type 【{type}】")
 
