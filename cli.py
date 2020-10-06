@@ -123,8 +123,8 @@ if __name__ == "__main__":
             for path in list_path:
                 cli.parse_path(path, switch_args)
 
-            path = input("继续输入path，按[Q]退出: ")
-            if path.lower() == "q":
+            inputs = input("继续输入path，按[Q]退出: ")
+            if inputs.lower() == "q":
                 break
 
 #####################################################################
